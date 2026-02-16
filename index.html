@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejemplo Async/Await</title>
+</head>
+<body>
+
+    <h1>"hello world" - JS Asíncrono</h1>
+
+    <button onclick="ejecutarTimeout()">Ejecuta ejemplo 1</button>
+    <button onclick="consultarAPI()">Ejecuta ejemplo 2</button>
+
+    <p id="resultado"></p>
+    <p id="datosAPI"></p>
+
+<script>
+//1) setTimeout convertido a async/await
+
+//función que devuelve una promesa
+function esperar(ms) {
+    return new Promise(resolve => {
+        setTimeout(resolve, ms);
+    });
+}
+
+//función async que usa await
+async function ejecutarTimeout() {
+
+    document.getElementById("resultado").innerHTML = "Iniciando proceso...";
+
+    console.log("Inicio del programa");
+
+    await esperar(2000); //espera 2 segundos
+
+    console.log("Mensaje después de 2 segundos");
+
+    document.getElementById("resultado").innerHTML =
+        "Este mensaje apareció después de 2 segundos usando async/await";
+}
+
+//2) consulta a una api con async/await
+async function consultarAPI() {
+
+    document.getElementById("datosAPI").innerHTML = "Consultando API...";
+
+    try {
+        //API
+        const respuesta = await fetch("https://jsonplaceholder.typicode.com/todos/1");
+
+        const datos = await respuesta.json();
+
+        console.log("Datos recibidos:", datos);
+
+        //mostrar en la página
+        document.getElementById("datosAPI").innerHTML =
+            "User ID: " + datos.userId + "<br>" +
+            "ID: " + datos.id + "<br>" +
+            "Título: " + datos.title + "<br>" +
+            "Completado: " + datos.completed;
+
+    } catch (error) {
+        document.getElementById("datosAPI").innerHTML =
+            "Error al consultar la API";
+    }
+}
+</script>
+
+</body>
+</html>
